@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-	setlocale(0, "");
+	setlocale(LC_ALL, "Russian");
 	double a, z1, z2; // объ€вл€ем переменные,где a-значение задаваемое пользователем, z1 и z2 результаты вычислений по формулам.
 	
 	cout << "¬ведите значение a: \n";
