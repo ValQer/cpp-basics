@@ -1,6 +1,7 @@
 ﻿#include <iostream>
 #include <cmath>
 #include <iomanip>
+#include <string>
 using namespace std;
 
 int main() {
@@ -20,47 +21,51 @@ int main() {
 	*/
 	if (dX > 0) {
 		// Создаем шапку таблицы
-		cout << "------------------------------------\n";
+		cout << string(36,'-') << endl;
 		cout << "|" << setw(9) << "X" << setw(9)
 			 << "|" << setw(9) << "F" << setw(9) << "|\n";
-		cout << "------------------------------------\n";
+		cout << string(36,'-') << endl;
 
 		/*
 		* Выводим на экран таблицу и заполняем
 		* её значениями, вычисленными по заданным
 		* формулам
 		*/
-		if ((((int)a | (int)b) & (int)c) == 0) {
-			for (double x = X1; x <= X2; x = x + dX) {
-				if (x < 0.6 && b + c != 0) {
-					F = a * pow(x, 3) + pow(b, 2) + c;
-				}
-				else if (x > 0.6 && b + c == 0) {
-					F = (x - a) / (x - c);
-				}
-				else {
-					F = x / c + x / a;
-				}
-				int transfer = (int)F;
-				cout << "|" << setw(17) << x << "|"
-					 << setw(16) << transfer << "|\n";
-				cout << "------------------------------------\n";
+		for (double x = X1; x <= X2; x += dX) {
+			if (x < 0.6 && b + c != 0) {
+				F = a * pow(x, 3) + pow(b, 2) + c;
 			}
-		}
-		else {
-			for (double x = X1; x <= X2; x = x + dX) {
-				if (x < 0.6 && b + c != 0) {
-					F = a * pow(x, 3) + pow(b, 2) + c;
-				}
-				else if (x > 0.6 && b + c == 0) {
+			else if (x > 0.6 && b + c == 0) {
+				if (x - c != 0) {
 					F = (x - a) / (x - c);
 				}
 				else {
+					cout << "|" << setw(17) << x << "|"
+						<< setw(16) << "ERROR / 0" << "|\n";
+					cout << string(36, '-') << endl;
+					continue;
+				}
+			}
+			else {
+				if (c != 0 && a != 0) {
 					F = x / c + x / a;
 				}
+				else {
+					cout << "|" << setw(17) << x << "|"
+						<< setw(16) << "ERROR / 0" << "|\n";
+					cout << string(36, '-') << endl;
+					continue;
+				}
+			}
+			if ((((int)a | (int)b) & (int)c) == 0) {
 				cout << "|" << setw(17) << x << "|"
-					 << setw(16) << F << "|\n";
-				cout << "------------------------------------\n";
+					<< setw(16) << F << "|\n";
+				cout << string(36, '-') << endl;
+			}
+			else {
+				cout << "|" << setw(17) << x << "|"
+					<< setw(16) << (int)F << "|\n";
+				cout << string(36, '-') << endl;
 			}
 		}
 	}
