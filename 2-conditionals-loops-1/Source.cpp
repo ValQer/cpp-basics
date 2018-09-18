@@ -1,27 +1,72 @@
-#include <iostream>
+﻿#include <iostream>
 #include <cmath>
 #include <iomanip>
 using namespace std;
 
 int main() {
+	/*
+	* - Объявляем переменные
+	* - Просим пользователя ввести исходные данные
+	*/
 	double a, b, c, X1, X2, dX, F;
 	cout << "Please, Enter a, b, c: ";
 	cin >> a >> b >> c;
-	cout << "Please, Enter Xstart, Xend, dX: ";
+	cout << "Please, Enter X.start, X.end, dX: ";
 	cin >> X1 >> X2 >> dX;
 
-	cout << "------------------------------------\n"; 
-	cout << "|" << setw(9) << "X" << setw(9)
-		 << "|" << setw(9) << "F" << setw(9)<< "|\n";
-	cout << "------------------------------------\n";
+	/*
+	* Проверяем корректность шага функции,
+	* во избежание образования бесконечного цикла
+	*/
+	if (dX > 0) {
+		// Создаем шапку таблицы
+		cout << "------------------------------------\n";
+		cout << "|" << setw(9) << "X" << setw(9)
+			 << "|" << setw(9) << "F" << setw(9) << "|\n";
+		cout << "------------------------------------\n";
 
-	if (((int)a | (int)b) & (int)c) {
-		cout << "yes";
+		/*
+		* Выводим на экран таблицу и заполняем
+		* её значениями, вычисленными по заданным
+		* формулам
+		*/
+		if ((((int)a | (int)b) & (int)c) == 0) {
+			for (double x = X1; x <= X2; x = x + dX) {
+				if (x < 0.6 && b + c != 0) {
+					F = a * pow(x, 3) + pow(b, 2) + c;
+				}
+				else if (x > 0.6 && b + c == 0) {
+					F = (x - a) / (x - c);
+				}
+				else {
+					F = x / c + x / a;
+				}
+				int transfer = (int)F;
+				cout << "|" << setw(17) << x << "|"
+					 << setw(16) << transfer << "|\n";
+				cout << "------------------------------------\n";
+			}
+		}
+		else {
+			for (double x = X1; x <= X2; x = x + dX) {
+				if (x < 0.6 && b + c != 0) {
+					F = a * pow(x, 3) + pow(b, 2) + c;
+				}
+				else if (x > 0.6 && b + c == 0) {
+					F = (x - a) / (x - c);
+				}
+				else {
+					F = x / c + x / a;
+				}
+				cout << "|" << setw(17) << x << "|"
+					 << setw(16) << F << "|\n";
+				cout << "------------------------------------\n";
+			}
+		}
 	}
 	else {
-		cout << "not";
+		cout << "Incorrect value of dX!!!";
 	}
-
-	system("pause");
+	
 	return 0;
 }
