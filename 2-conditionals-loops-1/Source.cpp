@@ -74,6 +74,6 @@ int main() {
 	else {
 		cout << "Incorrect value of dX!!!";
 	}
-	system("pause");
+	
 	return 0;
 }
