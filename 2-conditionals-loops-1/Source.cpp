@@ -4,6 +4,12 @@
 #include <string>
 using namespace std;
 
+void error(double X) {
+	cout << "|" << setw(17) << X << "|"
+		<< setw(16) << "ERROR / 0" << "|\n";
+	cout << string(36, '-') << endl;
+}
+
 int main() {
 	/*
 	* - Объявляем переменные
@@ -40,9 +46,7 @@ int main() {
 					F = (x - a) / (x - c);
 				}
 				else {
-					cout << "|" << setw(17) << x << "|"
-						<< setw(16) << "ERROR / 0" << "|\n";
-					cout << string(36, '-') << endl;
+					error(x);
 					continue;
 				}
 			}
@@ -51,20 +55,18 @@ int main() {
 					F = x / c + x / a;
 				}
 				else {
-					cout << "|" << setw(17) << x << "|"
-						<< setw(16) << "ERROR / 0" << "|\n";
-					cout << string(36, '-') << endl;
+					error(x);
 					continue;
 				}
 			}
 			if ((((int)a | (int)b) & (int)c) == 0) {
 				cout << "|" << setw(17) << x << "|"
-					<< setw(16) << F << "|\n";
+					<< setw(16) << (int)F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 			else {
 				cout << "|" << setw(17) << x << "|"
-					<< setw(16) << (int)F << "|\n";
+					<< setw(16) << F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 		}
@@ -72,6 +74,6 @@ int main() {
 	else {
 		cout << "Incorrect value of dX!!!";
 	}
-	
+	system("pause");
 	return 0;
 }
