@@ -2,10 +2,11 @@
 #include <cmath>
 #include <iomanip>
 #include <string>
+#include <limits>
 using namespace std;
 
 void error(double X) {
-	cout << "|" << setw(17) << X << "|"
+	cout << "|" << setw(17) << fixed << X << "|"
 		<< setw(16) << "ERROR / 0" << "|\n";
 	cout << string(36, '-') << endl;
 }
@@ -16,6 +17,7 @@ int main() {
 	* - Просим пользователя ввести исходные данные
 	*/
 	double a, b, c, X1, X2, dX, F;
+	double Eps = numeric_limits<double>::epsilon();
 	cout << "Please, Enter a, b, c: ";
 	cin >> a >> b >> c;
 	cout << "Please, Enter X.start, X.end, dX: ";
@@ -38,10 +40,10 @@ int main() {
 		* формулам
 		*/
 		for (double x = X1; x <= X2; x += dX) {
-			if (x < 0.6 && b + c != 0) {
+			if (x < 0.6 && abs(b + c) > Eps) {
 				F = a * pow(x, 3) + pow(b, 2) + c;
 			}
-			else if (x > 0.6 && b + c == 0) {
+			else if (x > 0.6 && abs(b + c) < Eps) {
 				if (x - c != 0) {
 					F = (x - a) / (x - c);
 				}
@@ -51,7 +53,7 @@ int main() {
 				}
 			}
 			else {
-				if (c != 0 && a != 0) {
+				if (abs(c) > Eps && abs(a) > Eps) {
 					F = x / c + x / a;
 				}
 				else {
@@ -60,13 +62,13 @@ int main() {
 				}
 			}
 			if ((((int)a | (int)b) & (int)c) == 0) {
-				cout << "|" << setw(17) << x << "|"
+				cout << "|" << setw(17) << fixed << x << "|"
 					<< setw(16) << (int)F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 			else {
-				cout << "|" << setw(17) << x << "|"
-					<< setw(16) << F << "|\n";
+				cout << "|" << setw(17) << fixed << x << "|"
+					<< setw(16) << fixed << F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 		}
