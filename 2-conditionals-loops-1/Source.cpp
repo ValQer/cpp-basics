@@ -6,7 +6,7 @@
 using namespace std;
 
 void error(double X) {
-	cout << "|" << setw(17) << fixed << X << "|"
+	cout << "|" << setw(17) << X << "|"
 		<< setw(16) << "ERROR / 0" << "|\n";
 	cout << string(36, '-') << endl;
 }
@@ -18,6 +18,7 @@ int main() {
 	*/
 	double a, b, c, X1, X2, dX, F;
 	double Eps = numeric_limits<double>::epsilon();
+	cout << fixed;
 	cout << "Please, Enter a, b, c: ";
 	cin >> a >> b >> c;
 	cout << "Please, Enter X.start, X.end, dX: ";
@@ -44,7 +45,7 @@ int main() {
 				F = a * pow(x, 3) + pow(b, 2) + c;
 			}
 			else if (x > 0.6 && abs(b + c) < Eps) {
-				if (x - c != 0) {
+				if (abs(x - c) > Eps) {
 					F = (x - a) / (x - c);
 				}
 				else {
@@ -62,13 +63,13 @@ int main() {
 				}
 			}
 			if ((((int)a | (int)b) & (int)c) == 0) {
-				cout << "|" << setw(17) << fixed << x << "|"
+				cout << "|" << setw(17) << x << "|"
 					<< setw(16) << (int)F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 			else {
-				cout << "|" << setw(17) << fixed << x << "|"
-					<< setw(16) << fixed << F << "|\n";
+				cout << "|" << setw(17) << x << "|"
+					<< setw(16) << F << "|\n";
 				cout << string(36, '-') << endl;
 			}
 		}
