@@ -23,33 +23,44 @@ double NextElement(double x, int n) {
 	return CurentN;
 }
 
-int CreateTable(double x, double Eps) {
+double arctg(double x, double Eps, int &n) {
 	long MAxIters = 10000000;
 
 	double arc1 = 0, arc2 = -M_PI_2;
 
-	for (int n = 0; n < MAxIters; n++) {
-
+	for (n = 0; n < MAxIters; n++) {
 		arc2 += NextElement(x, n);
 
 		if (abs(arc2 - arc1) < Eps) {
-			cout << "|" << setw(14) << x
-				<< "|" << setw(14) << arc2 
-				<< "|" << setw(14) << atan(x)
-				<< "|" << setw(13) << n << "|\n";
 			break;
 		}
 
 
 		if (MAxIters - n < 2) {
-			cout << "ERROR!!!! Too small Eps!!!\n";
 			break;
 			return 0;
 		}
 
 		arc1 = arc2;
 	}
-	return 1;
+	return arc2;
+}
+
+
+int CreateRow(double x, double Eps) {
+	int n = 0;
+	if (arctg(x, Eps, n) == 0) {
+		cout << "ERROR!!!! Too small Eps!!!\n";
+		return 0;
+		
+	}
+	else {
+		cout << "|" << setw(14) << x
+			<< "|" << setw(14) << arctg(x, Eps, n)
+			<< "|" << setw(14) << atan(x)
+			<< "|" << setw(13) << n << "|\n";
+		return 1;
+	}
 }
 
 
@@ -75,7 +86,7 @@ int main() {
 		tablehead();
 		for (double x = x1; x <= x2; x += dx) {
 
-			if (CreateTable(x, Eps)) {
+			if (CreateRow(x, Eps)) {
 				continue;
 			}
 			else {
