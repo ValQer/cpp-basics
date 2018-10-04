@@ -2,7 +2,6 @@
 #include <cmath>
 #include <iomanip>
 #include <string>
-#include <limits>
 using namespace std;
 
 void error(double X) {
@@ -17,7 +16,7 @@ int main() {
 	* - Просим пользователя ввести исходные данные
 	*/
 	double a, b, c, X1, X2, dX, F;
-	double Eps = numeric_limits<double>::epsilon();
+	const double Eps = 1e-15;
 	cout << fixed;
 	cout << "Please, Enter a, b, c: ";
 	cin >> a >> b >> c;
