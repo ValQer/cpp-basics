@@ -52,7 +52,7 @@ int main() {
 				sum += arr[i];
 		}
 		if (check)
-			cout << "Sum of positive elements is: " << sum << endl;
+			cout << "Sum after first positive element is: " << sum << endl;
 		else 
 			cout << "Array doesn't contain positive elements...." << endl;
 
