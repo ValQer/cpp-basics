@@ -7,15 +7,16 @@ void sortArray(double a, double b, int n, double* arr) {
 	int j = 0;
 	for (int i = 0; i < n; i++) {
 		if (a <= (int) arr[i] && (int) arr[i] <= b ) {
-			swap(arr[j], arr[i]);
+			for (int l = i; l > j; l--)
+				swap(arr[l], arr[l-1]);
 			j++;
 		}
 	}
 }
 
 int main() {
-	int n, imax = 0;
-	double max, a, b, sum = 0;
+	int n;
+	double a, b;
 	cout << fixed;
 
 	cout << "Enter N: ";
@@ -26,33 +27,39 @@ int main() {
 	cin >> b;
 
 
-	if (n >= 0 && a < b) {
+	if (n > 0 && a < b) {
 		double *arr = new double [n];
 		cout << "Enter array: \n";
+		bool check = false;
+		int IndexFirstPosElem;
 		for (int i = 0; i < n; i++) {
 			cout << "[" << i + 1 << "]";
 			cin >> arr[i];
+			if (!check && arr[i] > 0) {
+				IndexFirstPosElem = i;
+				check = true;
+			}
 		}
-
-		max = arr[0];
+		int imax = 0;
+		double max = arr[0];
 		for (int i = 1; i < n; i++) {
 			if (abs(arr[i]) > max) {
 				max = abs(arr[i]);
 				imax = i;
 			}
 		}
-		cout << "Number of maximum element: " << imax + 1 << endl;
+		cout << "Maximum element index: " << imax + 1 << endl;
 
 
-		bool check = false;
-		for (int i = 0; i < n; i++) {
-			if (arr[i] > 0) 
-				check = true;
-			if (check) 
+		
+		
+		if (check) {
+			double sum = 0;
+			for (int i = IndexFirstPosElem; i < n; i++) {
 				sum += arr[i];
-		}
-		if (check)
+			}
 			cout << "Sum after first positive element is: " << sum << endl;
+		}
 		else 
 			cout << "Array doesn't contain positive elements...." << endl;
 
