@@ -26,17 +26,16 @@ int main() {
 	cout << "Enter b: ";
 	cin >> b;
 
-
 	if (n > 0 && a < b) {
 		double *arr = new double [n];
 		cout << "Enter array: \n";
 		bool check = false;
-		int IndexFirstPosElem;
+		int first_pos_elem_i;
 		for (int i = 0; i < n; i++) {
 			cout << "[" << i + 1 << "]";
 			cin >> arr[i];
 			if (!check && arr[i] > 0) {
-				IndexFirstPosElem = i;
+				first_pos_elem_i = i;
 				check = true;
 			}
 		}
@@ -48,21 +47,17 @@ int main() {
 				imax = i;
 			}
 		}
-		cout << "Maximum element index: " << imax + 1 << endl;
+		cout << "Index of the absolute maximum element of the array: " << imax + 1 << endl;
 
-
-		
-		
 		if (check) {
 			double sum = 0;
-			for (int i = IndexFirstPosElem; i < n; i++) {
+			for (int i = first_pos_elem_i + 1; i < n; i++) {
 				sum += arr[i];
 			}
 			cout << "Sum after first positive element is: " << sum << endl;
 		}
 		else 
-			cout << "Array doesn't contain positive elements...." << endl;
-
+			cout << "Array doesn't contain any positive elements..." << endl;
 
 		sortArray(a, b, n, arr);
 		for (int i = 0; i < n; i++) {
