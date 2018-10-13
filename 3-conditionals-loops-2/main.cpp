@@ -16,9 +16,9 @@ int main() {
 	cin >> X1;
 	cout << "Please, enter X (end): ";
 	cin >> X2;
-	cout << "Please, enter dX: ";
+	cout << "Please, enter dX > 0: ";
 	cin >> dX;
-	cout << "Please, enter Eps: ";
+	cout << "Please, enter Eps > 0: ";
 	cin >> Eps;
 
 	if (dX > 0 && X1 < X2 && X2 < -1 && Eps > 0) {

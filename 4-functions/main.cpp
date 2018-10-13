@@ -6,7 +6,7 @@
 
 using namespace std;
 
-void tablehead() {
+void PrintTableHead() {
 	cout << string(60, '-') << "\n|"
 		<< setw(8) << "X" << setw(7)
 		<< "|" << setw(12) << "arctg(x)"
@@ -16,58 +16,34 @@ void tablehead() {
 		<< string(60, '-') << endl;
 }
 
-double NextElement(double x, int n) {
+double arctg(double x, double eps, int &n, const int kMaxIters) {
+	double arc1, arc2 = -M_PI_2;
+	for (n = 0; n < kMaxIters; n++) {
+		arc1 = pow(-1, n + 1) / ((2 * n + 1)*pow(x, 2 * n + 1));
+		arc2 += arc1;
 
-	double CurentN = pow(-1, n + 1) / ((2 * n + 1)*pow(x, 2 * n + 1));
-
-	return CurentN;
-}
-
-double arctg(double x, double Eps, int &n) {
-	long MAxIters = 10000000;
-
-	double arc1 = 0, arc2 = -M_PI_2;
-
-	for (n = 0; n < MAxIters; n++) {
-		arc2 += NextElement(x, n);
-
-		if (abs(arc2 - arc1) < Eps) {
+		if (abs(arc1) < eps)
 			break;
-		}
-
-
-		if (MAxIters - n < 2) {
-			break;
-			return 0;
-		}
-
-		arc1 = arc2;
 	}
 	return arc2;
 }
 
-
-int CreateRow(double x, double Eps) {
+void CreateRow(double x, double eps) {
 	int n = 0;
-	if (arctg(x, Eps, n) == 0) {
-		cout << "ERROR!!!! Too small Eps!!!\n";
-		return 0;
-		
-	}
-	else {
-		cout << "|" << setw(14) << x
-			<< "|" << setw(14) << arctg(x, Eps, n)
-			<< "|" << setw(14) << atan(x)
-			<< "|" << setw(13) << n << "|\n";
-		return 1;
-	}
+	const int kMaxIters = 1000000;
+	double y = arctg(x, eps, n, kMaxIters);
+
+	cout << "|" << setw(14) << x << "|" << setw(14);
+	if (n == kMaxIters)
+		cout << "ERROR";
+	else
+		cout << y;
+	cout << "|" << setw(14) << atan(x)
+		<< "|" << setw(13) << n << "|\n";
 }
 
-
 int main() {
-
-	double x1, x2, dx, Eps;
-
+	double x1, x2, dx, eps;
 
 	cout << fixed;
 	cout << "X must be less than -1\n";
@@ -75,32 +51,19 @@ int main() {
 	cin >> x1;
 	cout << "Please, enter X (end): ";
 	cin >> x2;
-	cout << "Please, enter dX: ";
+	cout << "Please, enter dX > 0: ";
 	cin >> dx;
-	cout << "Please, enter Eps: ";
-	cin >> Eps;
+	cout << "Please, enter eps > 0: ";
+	cin >> eps;
 
-
-	if (dx > 0 && x2 < -1) {
-
-		tablehead();
-		for (double x = x1; x <= x2; x += dx) {
-
-			if (CreateRow(x, Eps)) {
-				continue;
-			}
-			else {
-				break;
-			}
-
-		}
+	if (dx > 0 && x2 < -1 && x1 < x2 && eps > 0) {
+		PrintTableHead();
+		for (double x = x1; x <= x2; x += dx)
+			CreateRow(x, eps);
 		cout << string(60, '-');
-
 	}
-
-	else {
+	else
 		cout << "\nInvalid values";
-	}
 
 	return 0;
 }
