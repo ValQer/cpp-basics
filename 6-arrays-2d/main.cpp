@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -63,6 +63,10 @@ int Find_Row(int rows, int cols, double** arr) {
 int main() {
 	int rows, cols;
 	
+	/*
+	* Вводим количесто строк и столбцов
+	* в нашей матрице
+	*/
 	cout << fixed;
 	cout << "Number of rows: ";
 	cin >> rows;
@@ -70,10 +74,12 @@ int main() {
 	cin >> cols;
 
 	if (rows > 0 && cols > 0) {
+		// Создаем двумерный динамический массив
 		double **arr = new double*[rows];
 		for (int i = 0; i < rows; i++)
 			arr[i] = new double[cols];
 
+		// Вводим имя файла, содержащего нашу матрицу
 		string file_name = "";
 		cout << "Enter file name (*.txt): ";
 		cin.ignore();
@@ -82,12 +88,14 @@ int main() {
 		ifstream matrix;
 		matrix.open(file_name);
 
+		// Проверяем открытие файла
 		if (!matrix.is_open())
 			cout << "ERROR!!!! Wrong name of file...";
 		else {
 			for (int i = 0; i < rows; i++) {
 				for (int j = 0; j < cols; j++) 
 					matrix >> arr[i][j];
+				matrix.close();
 			}
 
 			Delete_Rows(rows, cols, arr);
