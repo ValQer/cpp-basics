@@ -5,7 +5,7 @@
 using namespace std;
 
 int main() {
-	string sentence, file_name;
+	string file_name;
 
 	cout << "Enter file name (*.txt): ";
 	getline(cin, file_name);
@@ -16,6 +16,7 @@ int main() {
 		return 1;
 	}
 	else {
+		string sentence;
 		while (getline(fin, sentence, '.')) {
 			switch (sentence[0]) {
 				case '-':
@@ -27,6 +28,7 @@ int main() {
 					break;
 			}
 		}
+		fin.close();
 		return 0;
 	}
 }
