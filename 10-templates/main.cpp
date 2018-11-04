@@ -1,4 +1,4 @@
-#include <iostream>
+п»ї#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -111,7 +111,7 @@ template <class T>
 void DeleteRows(T **matrix, int &num_rows, int num_cols) {
     int i = 0;
     while (i < num_rows) {
-        // Проверяем строку на наличие отличных от нуля элементов
+        // РџСЂРѕРІРµСЂСЏРµРј СЃС‚СЂРѕРєСѓ РЅР° РЅР°Р»РёС‡РёРµ РѕС‚Р»РёС‡РЅС‹С… РѕС‚ РЅСѓР»СЏ СЌР»РµРјРµРЅС‚РѕРІ
         bool all_zeros = true;
         for (int j = 0; j < num_cols; j++)
             if (abs(matrix[i][j]) > 0) {
@@ -119,8 +119,8 @@ void DeleteRows(T **matrix, int &num_rows, int num_cols) {
                 break;
             }
 
-        // Если строка состоит только из нулевых элементов,
-        // переносим ее в конец и сокращаем число строк на 1
+        // Р•СЃР»Рё СЃС‚СЂРѕРєР° СЃРѕСЃС‚РѕРёС‚ С‚РѕР»СЊРєРѕ РёР· РЅСѓР»РµРІС‹С… СЌР»РµРјРµРЅС‚РѕРІ,
+        // РїРµСЂРµРЅРѕСЃРёРј РµРµ РІ РєРѕРЅРµС† Рё СЃРѕРєСЂР°С‰Р°РµРј С‡РёСЃР»Рѕ СЃС‚СЂРѕРє РЅР° 1
         if (all_zeros) {
             for (int l = i; l < num_rows - 1; l++)
                 swap(matrix[l], matrix[l + 1]);
@@ -136,7 +136,7 @@ template <class T>
 void DeleteCols(T **matrix, int num_rows, int &num_cols) {
     int j = 0;
     while (j < num_cols) {
-        // Проверяем столбец на наличие отличных от нуля элементов
+        // РџСЂРѕРІРµСЂСЏРµРј СЃС‚РѕР»Р±РµС† РЅР° РЅР°Р»РёС‡РёРµ РѕС‚Р»РёС‡РЅС‹С… РѕС‚ РЅСѓР»СЏ СЌР»РµРјРµРЅС‚РѕРІ
         bool all_zeros = true;
         for (int i = 0; i < num_rows; i++)
             if (abs(matrix[i][j]) > 0) {
@@ -144,8 +144,8 @@ void DeleteCols(T **matrix, int num_rows, int &num_cols) {
                 break;
             }
 
-        // Если столбец состоит только из нулевых элементов,
-        // переносим его в конец и сокращаем число столбцов на 1
+        // Р•СЃР»Рё СЃС‚РѕР»Р±РµС† СЃРѕСЃС‚РѕРёС‚ С‚РѕР»СЊРєРѕ РёР· РЅСѓР»РµРІС‹С… СЌР»РµРјРµРЅС‚РѕРІ,
+        // РїРµСЂРµРЅРѕСЃРёРј РµРіРѕ РІ РєРѕРЅРµС† Рё СЃРѕРєСЂР°С‰Р°РµРј С‡РёСЃР»Рѕ СЃС‚РѕР»Р±С†РѕРІ РЅР° 1
         if (all_zeros) {
             for (int l = j; l < num_cols - 1; l++)
                 for (int i = 0; i < num_rows; i++)
