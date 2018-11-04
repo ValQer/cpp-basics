@@ -36,7 +36,7 @@ int main() {
 			double arc1 = 0, arc2 = -M_PI_2;
 			for (n = 0; n <= kMaxIters; n++) {
 				arc2 += pow(-1, n + 1) / ((2 * n + 1) * pow(x, 2 * n + 1));
-				if (abs(arc2 - arc1) < eps)	break;
+				if (abs(arc2 - arc1) < eps) break;
 				arc1 = arc2;
 			}
 
