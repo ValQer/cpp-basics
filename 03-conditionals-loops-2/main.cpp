@@ -7,57 +7,51 @@
 using namespace std;
 
 int main() {
-	double X1, X2, dX, Eps;
-	const int kMaxIters = 10000000;
+	const int kMaxIters = 1000000;
 
-	cout << fixed;
+	double xn, xk, dx, eps;
 	cout << "X must be less than -1\n";
 	cout << "Please, enter X (start): ";
-	cin >> X1;
+	cin >> xn;
 	cout << "Please, enter X (end): ";
-	cin >> X2;
-	cout << "Please, enter dX > 0: ";
-	cin >> dX;
-	cout << "Please, enter Eps > 0: ";
-	cin >> Eps;
+	cin >> xk;
+	cout << "Please, enter dx > 0: ";
+	cin >> dx;
+	cout << "Please, enter eps > 0: ";
+	cin >> eps;
 
-	if (dX > 0 && X1 < X2 && X2 < -1 && Eps > 0) {
+	if (dx > 0 && xn < xk && xk < -1 && eps > 0) {
+		cout << string(62, '-') << endl;
+		cout << "|" << setw(8) << "X" << setw(7);
+		cout << "|" << setw(13) << "arctg(x)" << setw(4);
+		cout << "|" << setw(12) << "atan(x)" << setw(3);
+		cout << "|" << setw(12) << "iterations" << setw(3) << "|\n";
+		cout << string(62, '-') << endl;
 
-		cout << string(60, '-') << "\n|"
-			<< setw(8) << "X" << setw(7)
-			<< "|" << setw(12) << "arctg(x)"
-			<< setw(3) << "|" << setw(12)
-			<< "atan(x)" << setw(3) << "|" << setw(12) << "Iterations" << setw(3) << "|\n"
-			<< string(60, '-') << endl;
+		cout << fixed;
+		cout.precision(6);
 
-		for (double x = X1; x <= X2; x += dX) {
-
+		for (double x = xn; x <= xk; x += dx) {
+			int n;
 			double arc1 = 0, arc2 = -M_PI_2;
-
-			for (int n = 0; n < kMaxIters; n++) {
-
-				arc2 += pow(-1, n + 1) / ((2 * n + 1)*pow(x, 2 * n + 1));
-
-				if (abs(arc2 - arc1) < Eps) {
-					cout << "|" << setw(14) << x
-						<< "|" << setw(14) << arc2 << "|" << setw(14) << atan(x)
-						<< "|" << setw(13) << n << "|\n";
-					break;
-				}
-
-				if (kMaxIters - n < 2) {
-					cout << "ERROR!!!! Too small Eps!!!\n";
-					return 2;
-				}
-
+			for (n = 0; n <= kMaxIters; n++) {
+				arc2 += pow(-1, n + 1) / ((2 * n + 1) * pow(x, 2 * n + 1));
+				if (abs(arc2 - arc1) < eps)	break;
 				arc1 = arc2;
 			}
-		}
-		cout << string(60, '-');
-	}
 
+			cout << "|" << setw(14) << x << "|" << setw(16);
+			if (n > kMaxIters)
+				cout << "limit exceeded ";
+			else
+				cout << arc1;
+			cout << "|" << setw(14) << atan(x)
+				<< "|" << setw(13) << n << "|\n";
+		}
+		cout << string(62, '-');
+	}
 	else {
-		cout << "\nInvalid values";
+		cout << "\nInvalid values.\n";
 	}
 
 	return 0;

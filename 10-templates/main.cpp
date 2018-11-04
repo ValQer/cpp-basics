@@ -1,145 +1,168 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#define N 10
 
 using namespace std;
 
-template <class type>
-void Delete_Rows(int &rows, int cols, type (&arr)[N][N]) {
-	for (int i = 0; i < rows; i++) {
-		bool is_null = false;
-		for (int j = 0; j < cols; j++) {
-			const double eps = 1e-15;
-			if (abs(arr[i][j]) < eps)
-				is_null = true;
-			else {
-				is_null = false;
-				break;
-			}
-		}
-		if (is_null) {
-			for (int l = i; l < rows - 1; l++) {
-				for (int j = 0; j < cols; j++)
-					swap(arr[l][j], arr[l + 1][j]);
-			}
-			i--;
-			rows--;
-		}
-	}
-}
+template <class T>
+void ReadMatrix(T **matrix, int num_rows, int num_cols, ifstream &fin);
 
-template <class type>
-void Delete_Cols(int rows, int &cols, type (&arr)[N][N]) {
-	for (int i = 0; i < cols; i++) {
-		bool is_null = false;
-		for (int j = 0; j < rows; j++) {
-			const double eps = 1e-15;
-			if (abs(arr[j][i]) < eps)
-				is_null = true;
-			else {
-				is_null = false;
-				break;
-			}
-		}
-		if (is_null) {
-			for (int l = i; l < cols - 1; l++) {
-				for (int j = 0; j < rows; j++)
-					swap(arr[j][l], arr[j][l + 1]);
-			}
-			i--;
-			cols--;
-		}
-	}
-}
+template <class T>
+void PrintMatrix(T **matrix, int num_rows, int num_cols);
 
-template <class type>
-void InputMatrix(type (&arr)[N][N]) {
+template <class T>
+void DeleteRows(T **matrix, int &num_rows, int num_cols);
+
+template <class T>
+void DeleteCols(T **matrix, int num_rows, int &num_cols);
+
+template <class T>
+int FindFirstPosRow(T **matrix, int num_rows, int num_cols);
+
+template <class T>
+int Execute(string file_name);
+
+int main() {
 	while (true) {
-		string file_name;
-		cout << "Enter file name(*.txt): ";
-		getline(cin, file_name);
-		ifstream fin(file_name);
+		string type;
+		cout << "Select type (1 - int, 2 - float, 3 - double, e - to close): ";
+		cin >> type;
 
-		if (!fin.is_open())
-			cout << "Wrong name of file...\n";
+		if (type == "e") {
+			return 0;
+		}
+		else if (type == "1") {
+			Execute<int>("int.txt");
+		}
+		else if (type == "2") {
+			Execute<float>("float.txt");
+		}
+		else if (type == "3") {
+			Execute<double>("double.txt");
+		}
 		else {
-			for (int i = 0; i < N; i++) {
-				for (int j = 0; j < N; j++)
-					fin >> arr[i][j];
-			}
-			fin.close();
-			break;
+			cout << "\nERROR... Enter correct character...\n\n";
 		}
 	}
 }
 
-template <class type>
-void PrintMatrix(int rows, int cols, type(&arr)[N][N]) {
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++)
-			cout << arr[i][j] << "\t";
+template <class T>
+int Execute(string file_name) {
+	ifstream fin(file_name);
+	if (!fin.is_open()) {
+		cout << "ERROR!!! Can't open file: " << file_name << endl;
+		return 1;
+	}
+
+	int num_rows, num_cols;
+	fin >> num_rows;
+	fin >> num_cols;
+
+	T **matrix = new T*[num_rows];
+	for (int i = 0; i < num_rows; i++)
+		matrix[i] = new T[num_cols];
+
+	ReadMatrix(matrix, num_rows, num_cols, fin);
+	fin.close();
+
+	cout << "\nInitial matrix:\n";
+	PrintMatrix(matrix, num_rows, num_cols);
+
+	DeleteRows(matrix, num_rows, num_cols);
+	DeleteCols(matrix, num_rows, num_cols);
+	cout << "\nTransformed matrix:\n";
+	PrintMatrix(matrix, num_rows, num_cols);
+
+	int first_row_with_pos_element = FindFirstPosRow(matrix, num_rows, num_cols);
+	if (first_row_with_pos_element != -1) {
+		cout << "\nFirst row containing positive element: ";
+		cout << first_row_with_pos_element + 1;
+	}
+	else {
+		cout << "\nArray doesn't have any positive elements...";
+	}
+	cout << endl;
+	cout << endl;
+
+	for (int i = 0; i < num_rows; i++)
+		delete[] matrix[i];
+	delete[] matrix;
+
+	return 0;
+}
+
+template <class T>
+void ReadMatrix(T **matrix, int num_rows, int num_cols, ifstream &fin) {
+	for (int i = 0; i < num_rows; i++)
+		for (int j = 0; j < num_cols; j++)
+			fin >> matrix[i][j];
+}
+
+template <class T>
+void PrintMatrix(T **matrix, int num_rows, int num_cols) {
+	for (int i = 0; i < num_rows; i++) {
+		for (int j = 0; j < num_cols; j++)
+			cout << matrix[i][j] << "\t";
 		cout << endl;
 	}
 }
 
-template <class type>
-void Find_Row(int rows, int cols, type (&arr)[N][N]) {
-	int first_row_with_pos_element = 0;
-	for (int i = 0; i < rows; i++) {
-		for (int j = 0; j < cols; j++) {
-			if (arr[i][j] > 0)
-				first_row_with_pos_element = i + 1;
+template <class T>
+void DeleteRows(T **matrix, int &num_rows, int num_cols) {
+	int i = 0;
+	while (i < num_rows) {
+		// Проверяем строку на наличие отличных от нуля элементов
+		bool all_zeros = true;
+		for (int j = 0; j < num_cols; j++)
+			if (abs(matrix[i][j]) > 0) {
+				all_zeros = false;
+				break;
+			}
+
+		// Если строка состоит только из нулевых элементов,
+		// переносим ее в конец и сокращаем число строк на 1
+		if (all_zeros) {
+			for (int l = i; l < num_rows - 1; l++)
+				swap(matrix[l], matrix[l + 1]);
+			num_rows -= 1;
 		}
-		if (first_row_with_pos_element != 0) {
-			cout << "The number of the first row containing the positive element: " << first_row_with_pos_element;
-			break;
+		else {
+			i++;
 		}
 	}
-	if (first_row_with_pos_element == 0)
-		cout << "Array doesn't contain any positive elements...\n";
 }
 
-int main() {
-	while (true) {
-		char type;
-		cout << "Select type(1 - int, 2 - float, 3 - double, e - to close the program): ";
-		cin >> type;
-		cin.ignore();
+template <class T>
+void DeleteCols(T **matrix, int num_rows, int &num_cols) {
+	int j = 0;
+	while (j < num_cols) {
+		// Проверяем столбец на наличие отличных от нуля элементов
+		bool all_zeros = true;
+		for (int i = 0; i < num_rows; i++)
+			if (abs(matrix[i][j]) > 0) {
+				all_zeros = false;
+				break;
+			}
 
-		int rows = N, cols = N;
-		switch (type) {
-			case 'e':
-				return 1;
-			case '1': {
-				int arr[N][N];
-				InputMatrix(arr);
-				Delete_Rows(rows, cols, arr);
-				Delete_Cols(rows, cols, arr);
-				PrintMatrix(rows, cols, arr);
-				Find_Row(rows, cols, arr);
-				return 0;
-			}
-			case '2': {
-				float arr[N][N];
-				InputMatrix(arr);
-				Delete_Rows(rows, cols, arr);
-				Delete_Cols(rows, cols, arr);
-				PrintMatrix(rows, cols, arr);
-				Find_Row(rows, cols, arr);
-				return 0;
-			}
-			case '3': {
-				double arr[N][N];
-				InputMatrix(arr);
-				Delete_Rows(rows, cols, arr);
-				Delete_Cols(rows, cols, arr);
-				PrintMatrix(rows, cols, arr);
-				Find_Row(rows, cols, arr);
-				return 0;
-			}
-			default:
-				cout << "ERROR...Enter correct character.....\n";
+		// Если столбец состоит только из нулевых элементов,
+		// переносим его в конец и сокращаем число столбцов на 1
+		if (all_zeros) {
+			for (int l = j; l < num_cols - 1; l++)
+				for (int i = 0; i < num_rows; i++)
+					swap(matrix[i][l], matrix[i][l + 1]);
+			num_cols -= 1;
+		}
+		else {
+			j++;
 		}
 	}
+}
+
+template <class T>
+int FindFirstPosRow(T **matrix, int num_rows, int num_cols) {
+	for (int i = 0; i < num_rows; i++)
+		for (int j = 0; j < num_cols; j++)
+			if (matrix[i][j] > 0)
+				return i;
+	return -1;
 }

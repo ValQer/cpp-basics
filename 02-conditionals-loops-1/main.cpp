@@ -2,80 +2,69 @@
 #include <cmath>
 #include <iomanip>
 #include <string>
+
 using namespace std;
 
-void error(double X) {
-	cout << "|" << setw(17) << X << "|"
-		<< setw(16) << "ERROR / 0" << "|\n";
-	cout << string(36, '-') << endl;
-}
-
 int main() {
-	/*
-	* - Объявляем переменные
-	* - Просим пользователя ввести исходные данные
-	*/
-	double a, b, c, X1, X2, dX, F;
-	const double Eps = 1e-15;
+	const double kEps = 1e-15;
+
+	double a, b, c, xn, xk, dx;
 	cout << fixed;
-	cout << "Please, Enter a, b, c: ";
+	cout << "Please, enter a, b, c: ";
 	cin >> a >> b >> c;
-	cout << "Please, Enter X.start, X.end, dX: ";
-	cin >> X1 >> X2 >> dX;
+	cout << "Please, enter X.start, X.end, dx: ";
+	cin >> xn >> xk >> dx;
 
-	/*
-	* Проверяем корректность шага функции,
-	* во избежание образования бесконечного цикла
-	*/
-	if (dX > 0) {
+	// Проверяем корректность шага функции,
+	// во избежание образования бесконечного цикла
+	if (dx > 0) {
 		// Создаем шапку таблицы
-		cout << string(36,'-') << endl;
-		cout << "|" << setw(9) << "X" << setw(9)
-			 << "|" << setw(9) << "F" << setw(9) << "|\n";
-		cout << string(36,'-') << endl;
+		cout << string(36, '-') << endl;
+		cout << "|" << setw(9) << "x" << setw(9);
+		cout << "|" << setw(9) << "F" << setw(9) << "|\n";
+		cout << string(36, '-') << endl;
 
-		/*
-		* Выводим на экран таблицу и заполняем
-		* её значениями, вычисленными по заданным
-		* формулам
-		*/
-		for (double x = X1; x <= X2; x += dX) {
-			if (x < 0.6 && abs(b + c) > Eps) {
+		// Выводим на экран таблицу и заполняем
+		// её значениями, вычисленными по заданным формулам
+		for (double x = xn; x <= xk; x += dx) {
+			cout << "|" << setw(17) << x << "|" << setw(16);
+			double F;
+			if (x < 0.6 && abs(b + c) > kEps) {
 				F = a * pow(x, 3) + pow(b, 2) + c;
 			}
-			else if (x > 0.6 && abs(b + c) < Eps) {
-				if (abs(x - c) > Eps) {
+			else if (x > 0.6 && abs(b + c) < kEps) {
+				if (abs(x - c) > kEps) {
 					F = (x - a) / (x - c);
 				}
 				else {
-					error(x);
+					cout << " ERROR div by 0 |\n";
 					continue;
 				}
 			}
 			else {
-				if (abs(c) > Eps && abs(a) > Eps) {
+				if (abs(c) > kEps && abs(a) > kEps) {
 					F = x / c + x / a;
 				}
 				else {
-					error(x);
+					cout << " ERROR div by 0 |\n";
 					continue;
 				}
 			}
-			if ((((int)a | (int)b) & (int)c) == 0) {
-				cout << "|" << setw(17) << x << "|"
-					<< setw(16) << (int)F << "|\n";
-				cout << string(36, '-') << endl;
-			}
-			else {
-				cout << "|" << setw(17) << x << "|"
-					<< setw(16) << F << "|\n";
-				cout << string(36, '-') << endl;
-			}
+
+			int ac = static_cast<int>(a);
+			int bc = static_cast<int>(b);
+			int cc = static_cast<int>(c);
+			if ((ac | bc) & cc)
+				cout << F;
+			else
+				cout << static_cast<int>(F);
+			cout << "|\n";
 		}
+		cout << string(36, '-');
 	}
 	else {
-		cout << "Incorrect value of dX!!!";
+		cout << "Incorrect value of dx!!!";
 	}
-	
+
 	return 0;
 }
