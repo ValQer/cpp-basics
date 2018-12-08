@@ -1,29 +1,27 @@
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <algorithm>
 
 using namespace std;
 
 int main() {
-    string file_name;
-    cout << "Enter file name: ";
-    cin >> file_name;
+    string file_name = "text.txt";
     ifstream fin(file_name);
     if (!fin.is_open()) {
-        cout << "ERROR!!! Can't open file: " << file_name << endl;
+        cout << "ERROR!!! Can't open file: " << file_name << ".\n";
         return 1;
     }
-    cout << endl;
 
-    string sentence;
-    while (getline(fin, sentence, '.')) {
-        if (sentence[0] == '\n')
-            sentence = sentence.substr(1, sentence.length());
-
-        if (sentence.substr(0, 2) == " -") {
-            replace(sentence.begin(), sentence.end(), '\n', ' ');
-            cout << sentence << endl;
+    string line;
+    while (getline(fin, line)) {
+        string sentence = "";
+        for (size_t i = 0; i < line.length(); i++) {
+            sentence += line[i];
+            if (line[i] == '.' || line[i] == '!' || line[i] == '?') {
+                if (sentence.substr(0, 2) == " -")
+                    cout << sentence << endl;
+                sentence = "";
+            }
         }
     }
 
